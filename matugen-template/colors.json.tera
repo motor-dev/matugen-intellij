@@ -25,7 +25,20 @@
     "BLOCK_TERMINAL_SELECTED_BLOCK_BACKGROUND":        "{{colors.surface_variant.default.hex}}",
     "BLOCK_TERMINAL_INACTIVE_SELECTED_BLOCK_BACKGROUND":"{{colors.surface_variant.default.hex}}",
     "BLOCK_TERMINAL_HOVERED_BLOCK_BACKGROUND_START":   "#0AFFFFFF",
-    "BLOCK_TERMINAL_HOVERED_BLOCK_BACKGROUND_END":     "#03FFFFFF"
+    "BLOCK_TERMINAL_HOVERED_BLOCK_BACKGROUND_END":     "#03FFFFFF",
+
+    "FILESTATUS_MODIFIED":                             "{{colors.primary_fixed_dim.default.hex}}",
+    "FILESTATUS_ADDED":                                "{{colors.tertiary_fixed_dim.default.hex}}",
+    "FILESTATUS_COPIED":                               "{{colors.tertiary_fixed_dim.default.hex}}",
+    "FILESTATUS_RENAMED":                              "{{colors.secondary_fixed_dim.default.hex}}",
+    "FILESTATUS_DELETED":                              "{{colors.outline.default.hex}}",
+    "FILESTATUS_DELETED_FROM_FS":                      "{{colors.outline.default.hex}}",
+    "FILESTATUS_UNKNOWN":                              "{{colors.secondary_fixed_dim.default.hex}}",
+    "FILESTATUS_IGNORED":                              "{{colors.outline_variant.default.hex}}",
+    "FILESTATUS_MERGED":                               "{{colors.secondary_fixed_dim.default.hex}}",
+    "FILESTATUS_MERGE_CONFLICTS":                      "{{colors.error.default.hex}}",
+    "FILESTATUS_NOT_CHANGED_IMMEDIATE":                "{{colors.on_surface_variant.default.hex}}",
+    "FILESTATUS_NOT_CHANGED_RECURSIVE":                "{{colors.on_surface_variant.default.hex}}"
   },
   "textAttributes": {
 
@@ -903,6 +916,19 @@
     "VersionControl.GitLog.tagIconColor":                         "{{colors.on_surface_variant.default.hex}}",
     "VersionControl.RefLabel.backgroundBase":                     "{{colors.primary_container.default.hex}}",
     "VersionControl.RefLabel.foreground":                         "{{colors.on_primary_container.default.hex}}",
+
+    "VersionControl.FileStatus.MODIFIED":                         "{{colors.primary_fixed_dim.default.hex}}",
+    "VersionControl.FileStatus.ADDED":                            "{{colors.tertiary_fixed_dim.default.hex}}",
+    "VersionControl.FileStatus.COPIED":                           "{{colors.tertiary_fixed_dim.default.hex}}",
+    "VersionControl.FileStatus.RENAMED":                          "{{colors.secondary_fixed_dim.default.hex}}",
+    "VersionControl.FileStatus.DELETED":                          "{{colors.outline.default.hex}}",
+    "VersionControl.FileStatus.DELETED_FROM_FS":                  "{{colors.outline.default.hex}}",
+    "VersionControl.FileStatus.UNKNOWN":                          "{{colors.secondary_fixed_dim.default.hex}}",
+    "VersionControl.FileStatus.IGNORED":                          "{{colors.outline_variant.default.hex}}",
+    "VersionControl.FileStatus.MERGED":                           "{{colors.secondary_fixed_dim.default.hex}}",
+    "VersionControl.FileStatus.MERGE_CONFLICTS":                  "{{colors.error.default.hex}}",
+    "VersionControl.FileStatus.NOT_CHANGED_IMMEDIATE":            "{{colors.on_surface_variant.default.hex}}",
+    "VersionControl.FileStatus.NOT_CHANGED_RECURSIVE":            "{{colors.on_surface_variant.default.hex}}",
 
     "Plugins.background":                                         "{{colors.surface.default.hex}}",
     "Plugins.borderColor":                                       "{{colors.outline_variant.default.hex}}",
