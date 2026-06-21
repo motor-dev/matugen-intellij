@@ -1,11 +1,11 @@
-package com.matugen.intellij.settings
+package com.matugen.theme.settings
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.dsl.builder.panel
-import com.matugen.intellij.services.FileWatcherService
+import com.matugen.theme.services.FileWatcherService
 import javax.swing.JComponent
 
 class MatugenSettingsConfigurable : Configurable {

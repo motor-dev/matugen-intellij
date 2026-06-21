@@ -1,4 +1,4 @@
-package com.matugen.intellij.settings
+package com.matugen.theme.settings
 
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent

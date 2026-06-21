@@ -1,4 +1,4 @@
-package com.matugen.intellij.scheme
+package com.matugen.theme.scheme
 
 import com.intellij.ui.svg.SvgAttributePatcher
 import com.intellij.util.SVGLoader

@@ -1,4 +1,4 @@
-package com.matugen.intellij.scheme
+package com.matugen.theme.scheme
 
 import com.intellij.ide.ui.LafManager
 import com.intellij.openapi.application.ApplicationManager

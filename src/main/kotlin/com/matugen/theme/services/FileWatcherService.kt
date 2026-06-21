@@ -1,13 +1,13 @@
-package com.matugen.intellij.services
+package com.matugen.theme.services
 
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.logger
-import com.matugen.intellij.scheme.ColorSchemeConfig
-import com.matugen.intellij.scheme.SchemeApplier
-import com.matugen.intellij.settings.MatugenSettings
+import com.matugen.theme.scheme.ColorSchemeConfig
+import com.matugen.theme.scheme.SchemeApplier
+import com.matugen.theme.settings.MatugenSettings
 import java.io.File
 import java.nio.file.*
 import java.nio.file.StandardWatchEventKinds.*

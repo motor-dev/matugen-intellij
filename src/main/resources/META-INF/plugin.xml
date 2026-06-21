@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>com.matugen.intellij</id>
+    <id>com.matugen.theme</id>
     <name>Matugen Dynamic Color Scheme</name>
     <vendor email="motor.devel@gmail.com">Matugen</vendor>
 
@@ -14,24 +14,24 @@
     <depends>com.intellij.modules.platform</depends>
 
     <applicationListeners>
-        <listener class="com.matugen.intellij.startup.MatugenStartupListener"
+        <listener class="com.matugen.theme.startup.MatugenStartupListener"
                   topic="com.intellij.ide.AppLifecycleListener"/>
     </applicationListeners>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Persisted settings -->
         <applicationService
-            serviceImplementation="com.matugen.intellij.settings.MatugenSettings"/>
+            serviceImplementation="com.matugen.theme.settings.MatugenSettings"/>
 
         <!-- Core service: watches the config file and drives scheme updates -->
         <applicationService
-            serviceImplementation="com.matugen.intellij.services.FileWatcherService"/>
+            serviceImplementation="com.matugen.theme.services.FileWatcherService"/>
 
         <!-- Settings UI in Preferences → Appearance & Behavior → Matugen -->
         <applicationConfigurable
             parentId="appearance"
-            instance="com.matugen.intellij.settings.MatugenSettingsConfigurable"
-            id="com.matugen.intellij.settings"
+            instance="com.matugen.theme.settings.MatugenSettingsConfigurable"
+            id="com.matugen.theme.settings"
             displayName="Matugen Dynamic Colors"/>
 
         <!-- Notification group for user-facing status messages -->
@@ -41,8 +41,8 @@
     </extensions>
 
     <actions>
-        <action id="com.matugen.intellij.actions.ReloadSchemeAction"
-                class="com.matugen.intellij.actions.ReloadSchemeAction"
+        <action id="com.matugen.theme.actions.ReloadSchemeAction"
+                class="com.matugen.theme.actions.ReloadSchemeAction"
                 text="Reload Matugen Color Scheme"
                 description="Force-reload colors from the watched config file">
             <add-to-group group-id="ToolsMenu" anchor="last"/>

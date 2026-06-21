@@ -1,7 +1,7 @@
-package com.matugen.intellij.startup
+package com.matugen.theme.startup
 
 import com.intellij.ide.AppLifecycleListener
-import com.matugen.intellij.services.FileWatcherService
+import com.matugen.theme.services.FileWatcherService
 
 class MatugenStartupListener : AppLifecycleListener {
     // Runs after all startup activities and the persisted color scheme has been

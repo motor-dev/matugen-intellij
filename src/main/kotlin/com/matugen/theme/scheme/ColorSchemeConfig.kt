@@ -1,4 +1,4 @@
-package com.matugen.intellij.scheme
+package com.matugen.theme.scheme
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
