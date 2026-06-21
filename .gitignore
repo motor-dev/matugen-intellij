@@ -1,0 +1,21 @@
+# Gradle build output
+.gradle/
+build/
+
+# IntelliJ Platform plugin cache (downloaded IDEs, verifier results)
+.intellijPlatform/
+
+# Kotlin compiler cache
+.kotlin/
+
+# IntelliJ IDEA project files (generated, not source)
+.idea/
+*.iml
+out/
+
+# Compiled class files
+*.class
+
+# OS junk
+.DS_Store
+Thumbs.db
