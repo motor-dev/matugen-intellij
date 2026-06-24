@@ -1,0 +1,29 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Clip every paint band to the roller's rounded surface -->
+    <clipPath id="rollerSurface">
+      <rect x="9" y="9" width="30" height="14" rx="3"/>
+    </clipPath>
+  </defs>
+
+  <!-- Multicolor roller surface: diagonal bands sharing the cylinder -->
+  <g clip-path="url(#rollerSurface)">
+    <polygon points="-10,4 18.4,4 10.4,25 -18,25"   fill="#C0C1FF"/>
+    <polygon points="18.4,4 24.8,4 16.8,25 10.4,25" fill="#575992"/>
+    <polygon points="24.8,4 31.2,4 23.2,25 16.8,25" fill="#DC8A58"/>
+    <polygon points="31.2,4 37.6,4 29.6,25 23.2,25" fill="#DDC57A"/>
+    <polygon points="37.6,4 66,4 58,25 29.6,25"      fill="#97D5A5"/>
+  </g>
+
+  <!-- Outline around the roller so the pale colors stand out on light backgrounds -->
+  <rect x="9" y="9" width="30" height="14" rx="3" fill="none" stroke="#2b2733" stroke-width="0.5"/>
+
+  <!-- White frame + handle with a thin dark outline, sweeping down to a centered grip -->
+  <path d="M42 17 C43 35 24 20 24 32 L24 32"
+        stroke="#2b2733" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+  <rect x="20.5" y="30.5" width="7" height="9" rx="3.6" fill="#2b2733"/>
+
+  <path d="M42 17 C43 35 24 20 24 32 L24 32"
+        stroke="#ffffff" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <rect x="21" y="31" width="6" height="8" rx="3" fill="#ffffff"/>
+</svg>
