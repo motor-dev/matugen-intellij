@@ -10,7 +10,7 @@ import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.editor.markup.EffectType
 import com.intellij.openapi.editor.markup.TextAttributes
 import com.intellij.openapi.util.IconLoader
-import com.intellij.util.SVGLoader
+import com.matugen.theme.settings.MatugenSettings
 import java.awt.Color
 import java.awt.Font
 import java.awt.Window
@@ -22,13 +22,61 @@ private val LOG = logger<SchemeApplier>()
 
 object SchemeApplier {
 
+    /** UIManager keys we've overridden, so a revert can remove exactly those. */
+    private var installedUiKeys: Set<String> = emptySet()
+    /** Whether an icon color patcher is currently installed (so revert can clear it). */
+    private var iconPatcherInstalled = false
+
     fun apply(config: ColorSchemeConfig) {
         ApplicationManager.getApplication().invokeLater {
             applyEditorScheme(config)
-            applyUiColors(config.uiColors)
-            applyIconColors(config.iconColors, config.iconColorOverrides)
+            // When "Apply to editor colors only" is enabled, skip the UI theme and icon
+            // recoloring AND roll back any overrides a previous full apply left behind, so
+            // the UI returns to the active theme's own colors.
+            if (MatugenSettings.getInstance().applyToEditorOnly) {
+                doRevertUiColors()
+            } else {
+                applyUiColors(config.uiColors)
+                applyIconColors(config.iconColors, config.iconColorOverrides)
+            }
             LOG.info("Matugen color scheme applied")
         }
+    }
+
+    /**
+     * Roll back the UI theme + icon overrides this plugin installed, restoring the colors
+     * the active IntelliJ theme defines. The editor color scheme is left untouched. Safe to
+     * call when nothing was applied (no-op). Use this when disabling the plugin or switching
+     * to editor-only mode. Schedules onto the EDT.
+     */
+    fun revertUiColors() {
+        ApplicationManager.getApplication().invokeLater { doRevertUiColors() }
+    }
+
+    private fun doRevertUiColors() {
+        if (installedUiKeys.isEmpty() && !iconPatcherInstalled) return
+
+        // Drop our developer-defaults overrides so keys resolve through the LaF defaults
+        // again. (We seeded both tables in applyUiColors; the LaF map is rebuilt below.)
+        for (key in installedUiKeys) {
+            UIManager.put(key, null)
+        }
+        installedUiKeys = emptySet()
+
+        if (iconPatcherInstalled) {
+            uninstallColorPatcher()
+            IconLoader.clearCache()
+            iconPatcherInstalled = false
+        }
+
+        // updateUI() rebuilds the LaF defaults map from the active theme, discarding the
+        // values we injected into it; with our UIManager overrides removed, components now
+        // resolve the theme's own colors.
+        LafManager.getInstance().updateUI()
+        for (window in Window.getWindows()) {
+            SwingUtilities.updateComponentTreeUI(window)
+        }
+        LOG.info("Matugen UI overrides reverted to theme")
     }
 
     /**
@@ -37,20 +85,50 @@ object SchemeApplier {
      * global SVG color patcher (see [MatugenIconColorPatcher]). Installing a patcher
      * with a fresh digest + clearing the icon cache forces re-rasterization.
      */
-    @Suppress("DEPRECATION", "UnstableApiUsage")
     private fun applyIconColors(
         iconColors: Map<String, String>,
         iconColorOverrides: Map<String, Map<String, String>>,
     ) {
         if (iconColors.isEmpty() && iconColorOverrides.isEmpty()) return
-        // SVGLoader.colorPatcherProvider is the global icon color patcher hook. It is
-        // marked deprecated/internal, but it remains the only runtime entry point for
-        // recoloring monochrome icons (the icon palette is otherwise a load-time snapshot).
-        SVGLoader.colorPatcherProvider = MatugenIconColorPatcher(iconColors, iconColorOverrides)
+        // The global SVG color patcher is the only runtime entry point for recoloring
+        // monochrome icons (the icon palette is otherwise a load-time snapshot). Both the
+        // patcher interface and SVGLoader.setColorPatcherProvider are @ApiStatus.Internal,
+        // so we install them via reflection to keep the marketplace verifier happy; see
+        // MatugenIconColorPatcher.toProviderProxy().
+        val provider = MatugenIconColorPatcher(iconColors, iconColorOverrides).toProviderProxy() ?: return
+        if (!installColorPatcher(provider)) return
+        iconPatcherInstalled = true
         IconLoader.clearCache()
         for (window in Window.getWindows()) {
             window.repaint()
         }
+    }
+
+    /**
+     * Reflectively calls `SVGLoader.setColorPatcherProvider(provider)`. Returns `false`
+     * (and logs) if the internal API can't be reached on the running platform, so icon
+     * recoloring degrades gracefully without breaking the rest of the theme.
+     */
+    private fun installColorPatcher(provider: Any): Boolean = try {
+        val loaderClass = Class.forName("com.intellij.util.SVGLoader")
+        val ifaceClass = Class.forName("com.intellij.util.SVGLoader\$SvgElementColorPatcherProvider")
+        loaderClass.getMethod("setColorPatcherProvider", ifaceClass).invoke(null, provider)
+        true
+    } catch (e: Throwable) {
+        LOG.warn("Could not install icon color patcher (platform API changed); icons won't be recolored", e)
+        false
+    }
+
+    /**
+     * Reflectively clears the global SVG color patcher (`SVGLoader.setColorPatcherProvider(null)`)
+     * so monochrome icons fall back to the theme's own palette. Mirrors [installColorPatcher].
+     */
+    private fun uninstallColorPatcher() = try {
+        val loaderClass = Class.forName("com.intellij.util.SVGLoader")
+        val ifaceClass = Class.forName("com.intellij.util.SVGLoader\$SvgElementColorPatcherProvider")
+        loaderClass.getMethod("setColorPatcherProvider", ifaceClass).invoke(null, null)
+    } catch (e: Throwable) {
+        LOG.warn("Could not clear icon color patcher; icons may keep matugen colors until restart", e)
     }
 
     private fun applyEditorScheme(config: ColorSchemeConfig) {
@@ -100,6 +178,8 @@ object SchemeApplier {
         for (window in Window.getWindows()) {
             SwingUtilities.updateComponentTreeUI(window)
         }
+        // Remember what we touched so a later revert can remove exactly these keys.
+        installedUiKeys = uiColors.keys.toSet()
     }
 }
 

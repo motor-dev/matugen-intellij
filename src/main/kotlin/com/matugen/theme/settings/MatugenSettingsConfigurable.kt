@@ -6,6 +6,7 @@ import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.dsl.builder.panel
+import com.matugen.theme.scheme.SchemeApplier
 import com.matugen.theme.services.FileWatcherService
 import java.io.File
 import javax.swing.DefaultComboBoxModel
@@ -24,10 +25,10 @@ class MatugenSettingsConfigurable : Configurable {
     override fun createComponent(): JComponent {
         configPathField = TextFieldWithBrowseButton()
         configPathField.addBrowseFolderListener(
-            "Select Matugen Config File",
-            "Choose the JSON file that matugen writes its color output to",
             null,
             FileChooserDescriptorFactory.createSingleFileDescriptor("json")
+                .withTitle("Select Matugen Config File")
+                .withDescription("Choose the JSON file that matugen writes its color output to")
         )
 
         enabledCheckBox = JBCheckBox("Enable dynamic color scheme")
@@ -77,6 +78,11 @@ class MatugenSettingsConfigurable : Configurable {
         settings.enabled = enabledCheckBox.isSelected
         settings.applyToEditorOnly = editorOnlyCheckBox.isSelected
         FileWatcherService.getInstance().restart()
+        // restart() re-applies the scheme (which reverts UI overrides itself in editor-only
+        // mode), but when the plugin is disabled nothing re-applies, so revert explicitly.
+        if (!settings.enabled) {
+            SchemeApplier.revertUiColors()
+        }
     }
 
     override fun reset() {

@@ -13,12 +13,11 @@
 
     <depends>com.intellij.modules.platform</depends>
 
-    <applicationListeners>
-        <listener class="com.matugen.theme.startup.MatugenStartupListener"
-                  topic="com.intellij.ide.AppLifecycleListener"/>
-    </applicationListeners>
-
     <extensions defaultExtensionNs="com.intellij">
+        <!-- Bootstraps the file watcher after the IDE has finished starting up -->
+        <postStartupActivity
+            implementation="com.matugen.theme.startup.MatugenStartupActivity"/>
+
         <!-- Persisted settings -->
         <applicationService
             serviceImplementation="com.matugen.theme.settings.MatugenSettings"/>

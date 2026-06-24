@@ -22,12 +22,18 @@ class FileWatcherService {
     private val watchThread = AtomicReference<Thread?>(null)
 
     /** Called by the settings configurable after the user saves changes. */
+    @Synchronized
     fun restart() {
         stop()
         start()
     }
 
+    @Synchronized
     fun start() {
+        // Idempotent: a postStartupActivity fires once per opened project, but only the
+        // first call should spin up a watcher. Bail if one is already running.
+        watchThread.get()?.let { if (it.isAlive) return }
+
         val settings = MatugenSettings.getInstance()
         if (!settings.enabled) return
 
@@ -118,8 +124,8 @@ class FileWatcherService {
             .notify(null)
     }
 
-    // Startup is triggered by MatugenStartupListener via AppLifecycleListener.appStarted(),
-    // which fires after the IDE has restored the persisted color scheme from disk.
+    // Startup is triggered by MatugenStartupActivity (a postStartupActivity), which fires
+    // after the IDE has finished starting and restored the persisted color scheme from disk.
 
     companion object {
         fun getInstance(): FileWatcherService =
