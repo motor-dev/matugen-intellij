@@ -961,12 +961,12 @@
     "Plugins.Tab.selectedForeground":                            "{{colors.on_primary_container.dark.hex}}",
     "Plugins.ScreenshotPagination.CurrentImage.fillColor":       "{{colors.primary.dark.hex}}",
 
-    "FileColor.Blue":                                             "{{colors.surface_container_high.dark.hex | to_color | harmonize: "#CADFEA"}}",
-    "FileColor.Green":                                            "{{colors.surface_container_high.dark.hex | to_color | harmonize: "#DBE7C9"}}",
-    "FileColor.Orange":                                           "{{colors.surface_container_high.dark.hex | to_color | harmonize: "#F5D4C1"}}",
-    "FileColor.Yellow":                                           "{{colors.surface_container_high.dark.hex | to_color | harmonize: "#EEE2BD"}}",
-    "FileColor.Rose":                                             "{{colors.surface_container_high.dark.hex | to_color | harmonize: "#EED7F5"}}",
-    "FileColor.Violet":                                           "{{colors.surface_container_high.dark.hex | to_color | harmonize: "#DBD8EF"}}",
+    "FileColor.Blue":                                             "{{colors.surface_container_high.dark.hex | to_color | blend: "#8D9CA4", 0.8 | lighten 4 }}",
+    "FileColor.Green":                                            "{{colors.surface_container_high.dark.hex | to_color | blend: "#99A28D", 0.8 | lighten 4 }}",
+    "FileColor.Orange":                                           "{{colors.surface_container_high.dark.hex | to_color | blend: "#AC9487", 0.8 | lighten 4 }}",
+    "FileColor.Yellow":                                           "{{colors.surface_container_high.dark.hex | to_color | blend: "#A79E84", 0.8 | lighten 4 }}",
+    "FileColor.Rose":                                             "{{colors.surface_container_high.dark.hex | to_color | blend: "#A797AC", 0.8 | lighten 4 }}",
+    "FileColor.Violet":                                           "{{colors.surface_container_high.dark.hex | to_color | blend: "#9997A7", 0.8 | lighten 4 }}",
     "FileColor.Gray":                                             "{{colors.surface_container_high.dark.hex}}",
 
     "TrialWidget.Default.foreground":        "{{colors.on_secondary_container.dark.hex}}",
