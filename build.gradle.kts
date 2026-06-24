@@ -27,6 +27,14 @@ dependencies {
     }
 }
 
+// Package the matugen templates into the plugin jar under /templates so the
+// settings panel can export them. matugen-template/ stays the single source.
+tasks.processResources {
+    from("matugen-template") {
+        into("templates")
+    }
+}
+
 intellijPlatform {
     pluginConfiguration {
         name = providers.gradleProperty("pluginName")

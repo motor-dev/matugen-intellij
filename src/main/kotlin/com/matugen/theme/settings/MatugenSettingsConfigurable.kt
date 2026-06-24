@@ -58,6 +58,18 @@ class MatugenSettingsConfigurable : Configurable {
                     comment("Copies the selected preset to the config path above and reloads colors.")
                 }
             }
+            group("Matugen Templates") {
+                row {
+                    button("Export Matugen Templates…") { exportTemplates() }
+                }
+                row {
+                    comment(
+                        "Writes the bundled matugen templates to disk and shows the " +
+                        "config snippet to add to your matugen config.toml. " +
+                        "Use this for fully dynamic colors driven by matugen."
+                    )
+                }
+            }
             group("Behavior") {
                 row { cell(enabledCheckBox) }
                 row { cell(editorOnlyCheckBox) }
@@ -106,6 +118,55 @@ class MatugenSettingsConfigurable : Configurable {
                 if (eq < 0) null
                 else PresetEntry(line.substring(0, eq).trim(), line.substring(eq + 1).trim())
             }
+    }
+
+    private val templateFiles = listOf(
+        "colors.json.tera",
+        "colors.dark.json.tera",
+        "colors.light.json.tera",
+    )
+
+    private fun exportTemplates() {
+        // Default to the matugen dir under the IDE config path (sibling of colors.json).
+        val defaultDir = File(MatugenSettings.defaultConfigPath()).parentFile.resolve("templates")
+
+        val descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor()
+            .withTitle("Select Export Directory")
+            .withDescription("The matugen templates will be written here")
+        val chosen = com.intellij.openapi.fileChooser.FileChooser.chooseFile(
+            descriptor, null, com.intellij.openapi.vfs.LocalFileSystem.getInstance()
+                .refreshAndFindFileByIoFile(defaultDir.apply { mkdirs() })
+        ) ?: return
+        val dir = File(chosen.path)
+
+        val written = templateFiles.mapNotNull { name ->
+            val content = javaClass.getResourceAsStream("/templates/$name")
+                ?.bufferedReader()?.readText() ?: return@mapNotNull null
+            dir.resolve(name).writeText(content)
+            name
+        }
+        if (written.isEmpty()) {
+            Messages.showErrorDialog("No bundled templates were found in the plugin.", "Export Failed")
+            return
+        }
+
+        val output = configPathField.text.trim().ifEmpty { MatugenSettings.defaultConfigPath() }
+        val input = dir.resolve("colors.json.tera").absolutePath
+        val snippet = """
+            [templates.intellij]
+            input_path  = "$input"
+            output_path = "$output"
+        """.trimIndent()
+
+        com.intellij.openapi.ide.CopyPasteManager.getInstance()
+            .setContents(java.awt.datatransfer.StringSelection(snippet))
+
+        Messages.showInfoMessage(
+            "Exported ${written.size} template(s) to:\n$dir\n\n" +
+            "Add this to your matugen config.toml (copied to clipboard):\n\n$snippet\n\n" +
+            "Then run matugen to generate the colors file the plugin watches.",
+            "Templates Exported"
+        )
     }
 
     private fun applySelectedPreset() {
