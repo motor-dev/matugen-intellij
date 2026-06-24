@@ -1,9 +1,11 @@
 package com.matugen.theme.settings
 
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
+import java.io.File
 
 @State(
     name = "MatugenSettings",
@@ -38,9 +40,7 @@ class MatugenSettings : PersistentStateComponent<MatugenSettings.State> {
         fun getInstance(): MatugenSettings =
             ApplicationManager.getApplication().getService(MatugenSettings::class.java)
 
-        private fun defaultConfigPath(): String {
-            val home = System.getProperty("user.home")
-            return "$home/.config/JetBrains/colors.json"
-        }
+        fun defaultConfigPath(): String =
+            File(PathManager.getConfigPath()).parentFile.resolve("matugen/colors.json").absolutePath
     }
 }

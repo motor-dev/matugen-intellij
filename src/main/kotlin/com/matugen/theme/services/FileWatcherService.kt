@@ -33,8 +33,14 @@ class FileWatcherService {
 
         val configFile = File(settings.configFilePath)
         if (!configFile.isFile) {
-            notify("Matugen config not found at ${configFile.absolutePath}", NotificationType.WARNING)
-            return
+            if (!trySeedDefaultPreset(configFile)) {
+                notify(
+                    "Matugen: no config file at ${configFile.absolutePath}. " +
+                    "Use Settings → Appearance & Behavior → Matugen to load a preset.",
+                    NotificationType.WARNING
+                )
+                return
+            }
         }
 
         // Apply immediately on startup
@@ -85,6 +91,23 @@ class FileWatcherService {
         } catch (e: Exception) {
             LOG.warn("Failed to parse or apply matugen colors", e)
             notify("Matugen parse error: ${e.message}", NotificationType.ERROR)
+        }
+    }
+
+    private fun trySeedDefaultPreset(configFile: File): Boolean {
+        val indexStream = FileWatcherService::class.java.getResourceAsStream("/presets/index.txt") ?: return false
+        val firstLine = indexStream.bufferedReader().readLines().firstOrNull { '=' in it } ?: return false
+        val filename = firstLine.substringBefore('=').trim()
+        val content = FileWatcherService::class.java.getResourceAsStream("/presets/$filename")
+            ?.bufferedReader()?.readText() ?: return false
+        return try {
+            configFile.parentFile?.mkdirs()
+            configFile.writeText(content)
+            notify("Matugen: seeded default preset. Customize in Settings → Appearance & Behavior → Matugen.", NotificationType.INFORMATION)
+            true
+        } catch (e: Exception) {
+            LOG.warn("Failed to seed default Matugen preset", e)
+            false
         }
     }
 
