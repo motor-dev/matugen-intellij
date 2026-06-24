@@ -831,6 +831,7 @@
     "NotificationsToolwindow.newNotification.background":         "{{colors.surface_variant.default.hex}}",
     "NotificationsToolwindow.newNotification.hoverBackground":    "{{colors.surface_container.default.hex}}",
 
+    "Banner.foreground":                                          "{{colors.on_surface_variant.default.hex}}",
     "Banner.errorBackground":                                     "{{colors.error_container.default.hex}}",
     "Banner.errorForeground":                                     "{{colors.on_error_container.default.hex}}",
     "Banner.warningBackground":                                   "{{colors.secondary_container.default.hex}}",
