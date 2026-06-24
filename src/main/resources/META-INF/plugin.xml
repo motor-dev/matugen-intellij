@@ -33,6 +33,20 @@
             id="com.matugen.theme.settings"
             displayName="Matugen Dynamic Colors"/>
 
+        <!-- Notice next to the platform Appearance page: colors there are overridden -->
+        <applicationConfigurable
+            parentId="preferences.lookFeel"
+            instance="com.matugen.theme.settings.MatugenAppearanceNoticeConfigurable"
+            id="com.matugen.theme.notice.appearance"
+            displayName="Overridden by Matugen"/>
+
+        <!-- Notice next to the platform Editor > Color Scheme page -->
+        <applicationConfigurable
+            parentId="reference.settingsdialog.IDE.editor.colors"
+            instance="com.matugen.theme.settings.MatugenColorSchemeNoticeConfigurable"
+            id="com.matugen.theme.notice.colorscheme"
+            displayName="Overridden by Matugen"/>
+
         <!-- Notification group for user-facing status messages -->
         <notificationGroup
             id="Matugen"
